@@ -1,3 +1,16 @@
+# Running in Docker
+This fork provides a docker containarization and edits to directly output the semantic segmentation color images for cityscapes. To begin, download the trained models from [OneDrive](https://1drv.ms/u/s!Aus8VCZ_C_33gSlK7Fju_sXCxFUt?e=WZ96Ck)/[BaiduYun(Access Code:t6ri)](https://pan.baidu.com/s/1GXNPm5_DuzVVoKob2pZguA) (same links as below).
+To set up, build the docker image:
+```bash
+$ cd ~/git/HRNet-Semantic-Segmentation/
+$ docker build -t hrnet-semantic-segmentation -f Dockerfile .
+```
+The following command will start the image and run the system. Be sure to update the `TEST.MODEL_FILE` path. The `list/cityscapes/input_imgs.lst` file referenced is located at `~/git/HRNet-Semantic-Segmentation/data/list/cityscapes/test_imgs.lst` must contain a `\n` separated list of image file paths to process. The file paths must be relative to `~/git/HRNet-Semantic-Segmentation/data/cityscapes`.
+```bash
+$ cd ~/git/HRNet-Semantic-Segmentation/
+$ nvidia-docker run --ipc=host -v "$(pwd):$(pwd)" --user "$(id -u):$(id -g)" hrnet-semantic-segmentation bash -c "cd $(pwd) && python tools/test.py --cfg experiments/cityscapes/seg_hrnet_w48_train_512x1024_sgd_lr1e-2_wd5e-4_bs_12_epoch484.yaml DATASET.TEST_SET list/cityscapes/input_imgs.lst TEST.MODEL_FILE checkpoints/hrnet_w48_cityscapes_cls19_1024x2048_trainset.pth  TEST.FLIP_TEST False"
+```
+
 # High-resolution networks (HRNets) for Semantic Segmentation 
 
 ## Branches
